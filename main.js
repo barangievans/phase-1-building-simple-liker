@@ -2,12 +2,37 @@
 const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
-// Your JavaScript code goes here!
+const errorModal = document.getElementById('modal');
+const errorMessage = document.getElementById('modal-message');
 
+errorModal.classList.add('hidden'); // Initially hide the error modal
 
+function toggleHeart(event) {
+  const heart = event.target;
+  
+  if (heart.innerText === EMPTY_HEART) {
+    mimicServerCall()
+      .then(() => {
+        heart.innerText = FULL_HEART;
+        heart.classList.add('activated-heart');
+      })
+      .catch(error => {
+        errorMessage.innerText = error;
+        errorModal.classList.remove('hidden');
+        setTimeout(() => {
+          errorModal.classList.add('hidden');
+        }, 3000);
+      });
+  } else if (heart.innerText === FULL_HEART) {
+    heart.innerText = EMPTY_HEART;
+    heart.classList.remove('activated-heart');
+  }
+}
 
-
-//------------------------------------------------------------------------------
+const hearts = document.querySelectorAll('.like-glyph');
+hearts.forEach(heart => {
+  heart.addEventListener('click', toggleHeart);
+});
 // Don't change the code below: this function mocks the server response
 //------------------------------------------------------------------------------
 
